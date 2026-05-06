@@ -5,53 +5,95 @@
 
 -- Categories
 INSERT INTO categories (id, name, type, emoji, display_order) VALUES
-  ('best-dressed', 'Best Dressed', 'single', '👔', 1),
-  ('most-popular', 'Most Popular', 'single', '⭐', 2),
-  ('most-likely-to-succeed', 'Most Likely to Succeed', 'single', '🚀', 3),
-  ('life-of-the-party', 'Life of the Party', 'single', '🎉', 4),
-  ('best-couple', 'Best Couple', 'duo', '💕', 5)
-ON CONFLICT (id) DO NOTHING;
+  ('most-popular-female', 'Most Popular Female', 'single', '⭐', 1),
+  ('most-popular-male', 'Most Popular Male', 'single', '🌟', 2),
+  ('most-social-female', 'Most Social Female', 'single', '🦋', 3),
+  ('most-social-male', 'Most Social Male', 'single', '🗣️', 4),
+  ('best-duo', 'Best Duo', 'duo', '👯', 5),
+  ('most-confident-female', 'Most Confident Female', 'single', '👑', 6),
+  ('most-confident-male', 'Most Confident Male', 'single', '🦁', 7),
+  ('best-dressed-male', 'Best Dressed Male', 'single', '👔', 8),
+  ('best-dressed-female', 'Best Dressed Female', 'single', '👗', 9),
+  ('class-comedian', 'Class Comedian', 'single', '😂', 10),
+  ('beauty-with-brains-female', 'Beauty with Brains (Female)', 'single', '🧠', 11),
+  ('funs-with-brains', 'Funs with Brains', 'single', '💡', 12),
+  ('always-late-award', 'Always Late Award', 'single', '⏰', 13),
+  ('most-entrepreneurial-female', 'Most Entrepreneurial Female', 'single', '💼', 14),
+  ('most-entrepreneurial-male', 'Most Entrepreneurial Male', 'single', '🚀', 15),
+  ('future-leader-award', 'Future Leader Award', 'single', '🌍', 16),
+  ('most-talented', 'Most Talented', 'single', '🎨', 17),
+  ('music-icon', 'Music Icon', 'single', '🎵', 18),
+  ('most-influential', 'Most Influential', 'single', '🔥', 19),
+  ('sportswoman', 'Sportswoman', 'single', '🏃‍♀️', 20),
+  ('sportsman', 'Sportsman', 'single', '🏃‍♂️', 21),
+  ('face-of-computer-science', 'Face of Computer Science Department', 'single', '💻', 22)
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, type = EXCLUDED.type, emoji = EXCLUDED.emoji, display_order = EXCLUDED.display_order;
 
--- Best Dressed Nominees
+-- Nominees
 INSERT INTO nominees (id, category_id, name) VALUES
-  ('bd-1', 'best-dressed', 'Adewale Johnson'),
-  ('bd-2', 'best-dressed', 'Chiamaka Obi'),
-  ('bd-3', 'best-dressed', 'Femi Adeleke'),
-  ('bd-4', 'best-dressed', 'Zainab Mohammed'),
-  ('bd-5', 'best-dressed', 'Emeka Nwosu')
-ON CONFLICT (id) DO NOTHING;
-
--- Most Popular Nominees
-INSERT INTO nominees (id, category_id, name) VALUES
-  ('mp-1', 'most-popular', 'Tunde Bakare'),
-  ('mp-2', 'most-popular', 'Aisha Bello'),
-  ('mp-3', 'most-popular', 'Chinedu Okoro'),
-  ('mp-4', 'most-popular', 'Fatima Yusuf'),
-  ('mp-5', 'most-popular', 'Oluwaseun Adeola')
-ON CONFLICT (id) DO NOTHING;
-
--- Most Likely to Succeed Nominees
-INSERT INTO nominees (id, category_id, name) VALUES
-  ('mls-1', 'most-likely-to-succeed', 'Nneka Eze'),
-  ('mls-2', 'most-likely-to-succeed', 'Ibrahim Suleiman'),
-  ('mls-3', 'most-likely-to-succeed', 'Grace Okonkwo'),
-  ('mls-4', 'most-likely-to-succeed', 'Yusuf Abdullahi'),
-  ('mls-5', 'most-likely-to-succeed', 'Blessing Adekunle')
-ON CONFLICT (id) DO NOTHING;
-
--- Life of the Party Nominees
-INSERT INTO nominees (id, category_id, name) VALUES
-  ('lp-1', 'life-of-the-party', 'Kemi Ogundimu'),
-  ('lp-2', 'life-of-the-party', 'David Okafor'),
-  ('lp-3', 'life-of-the-party', 'Halima Garba'),
-  ('lp-4', 'life-of-the-party', 'Samuel Adeyemi'),
-  ('lp-5', 'life-of-the-party', 'Ngozi Chukwu')
-ON CONFLICT (id) DO NOTHING;
-
--- Best Couple Nominees
-INSERT INTO nominees (id, category_id, name) VALUES
-  ('bc-1', 'best-couple', 'Tunde & Aisha'),
-  ('bc-2', 'best-couple', 'Chinedu & Nneka'),
-  ('bc-3', 'best-couple', 'Femi & Zainab'),
-  ('bc-4', 'best-couple', 'David & Kemi')
-ON CONFLICT (id) DO NOTHING;
+  ('mpf-1', 'most-popular-female', 'Jolayemi-Peter Oreoluwakitan'),
+  ('mpf-2', 'most-popular-female', 'Adefisan Peace'),
+  ('mpf-3', 'most-popular-female', 'Ochanya Victoria'),
+  ('mpm-1', 'most-popular-male', 'Abdallah Abdallah'),
+  ('mpm-2', 'most-popular-male', 'Ngajo Jeremiah'),
+  ('mpm-3', 'most-popular-male', 'Odiase Brian'),
+  ('mpm-4', 'most-popular-male', 'Godfrey Delight'),
+  ('msf-1', 'most-social-female', 'Ochanya Victoria'),
+  ('msf-2', 'most-social-female', 'Abdulganiyu Lateefah'),
+  ('msf-3', 'most-social-female', 'Peter Polchong Precious'),
+  ('msm-1', 'most-social-male', 'Odiase Brian'),
+  ('msm-2', 'most-social-male', 'Ngajo Jeremiah'),
+  ('msm-3', 'most-social-male', 'Kolawole Toba'),
+  ('bd-1', 'best-duo', 'Aisha Gbadamosi and Ayegh Jessica'),
+  ('bd-2', 'best-duo', 'Abdulkadir Hassan and Otuaga Eseoghene'),
+  ('bd-3', 'best-duo', 'Yakubu Zainab and Maryam'),
+  ('mcf-1', 'most-confident-female', 'Moses Elizabeth Oreoluwa'),
+  ('mcf-2', 'most-confident-female', 'Otuaga Eseoghene'),
+  ('mcf-3', 'most-confident-female', 'Jolayemi-Peter Oreoluwakitan'),
+  ('mcm-1', 'most-confident-male', 'Oyekunle Adeniyi Oluwaseyi'),
+  ('mcm-2', 'most-confident-male', 'Ahmad Mansur'),
+  ('mcm-3', 'most-confident-male', 'Abdulkadir Hassan'),
+  ('bdm-1', 'best-dressed-male', 'Amaga Salem Ojima'),
+  ('bdm-2', 'best-dressed-male', 'Salau Promise'),
+  ('bdm-3', 'best-dressed-male', 'Mohammed Nasir'),
+  ('bdf-1', 'best-dressed-female', 'Edema Oristejeminetemi'),
+  ('bdf-2', 'best-dressed-female', 'Ayegba Shelter'),
+  ('cc-1', 'class-comedian', 'Salau Promise'),
+  ('cc-2', 'class-comedian', 'Odiase Brian'),
+  ('cc-3', 'class-comedian', 'Oyekunle Adeniyi Oluwaseyi'),
+  ('bwbf-1', 'beauty-with-brains-female', 'Aiyepe Halima'),
+  ('bwbf-2', 'beauty-with-brains-female', 'Otuaga Eseoghene'),
+  ('bwbf-3', 'beauty-with-brains-female', 'Abdulraheem Nafisat'),
+  ('bwbf-4', 'beauty-with-brains-female', 'Maigidaje Hidaya'),
+  ('bwbf-5', 'beauty-with-brains-female', 'Ochanya Victoria'),
+  ('fwb-1', 'funs-with-brains', 'Gabriel Emmanuel Eneojo'),
+  ('fwb-2', 'funs-with-brains', 'Alex-Akpojoseve Ahmed'),
+  ('fwb-3', 'funs-with-brains', 'Godfrey Delight'),
+  ('fwb-4', 'funs-with-brains', 'Kolawole Toba'),
+  ('ala-1', 'always-late-award', 'Zainab Abdulsalm'),
+  ('ala-2', 'always-late-award', 'Otuaga Eseoghene'),
+  ('ala-3', 'always-late-award', 'Omale Joseph'),
+  ('ala-4', 'always-late-award', 'Adum Amarpepe Vanderfan'),
+  ('mef-1', 'most-entrepreneurial-female', 'Adefian Peace Folashade'),
+  ('mef-2', 'most-entrepreneurial-female', 'Oluruntoba Favour'),
+  ('mem-1', 'most-entrepreneurial-male', 'Abdulhaqq Tijani'),
+  ('mem-2', 'most-entrepreneurial-male', 'Ahmad Al-ameen'),
+  ('mem-3', 'most-entrepreneurial-male', 'Samuel Joseph'),
+  ('fla-1', 'future-leader-award', 'Kolawole Toba'),
+  ('fla-2', 'future-leader-award', 'Abdallah Abdallah'),
+  ('mt-1', 'most-talented', 'Edema Oritsejeminetemi'),
+  ('mt-2', 'most-talented', 'Joshua Dania'),
+  ('mt-3', 'most-talented', 'Alex-Akpojosevbe Ahmed'),
+  ('mi-1', 'music-icon', 'Alex-Akpojosevbe Ahmed'),
+  ('minf-1', 'most-influential', 'Kolawole Toba'),
+  ('minf-2', 'most-influential', 'Abdallah Abdallah'),
+  ('minf-3', 'most-influential', 'Oyekunle Adeniyi OLuwaseyi'),
+  ('sw-1', 'sportswoman', 'Otuaga Eseoghene'),
+  ('sw-2', 'sportswoman', 'Oluruntoba Favour'),
+  ('sm-1', 'sportsman', 'Kolawole Toba'),
+  ('sm-2', 'sportsman', 'Joshua Dania'),
+  ('sm-3', 'sportsman', 'Adum Amarpepe Vanderfan'),
+  ('fcs-1', 'face-of-computer-science', 'Abdallah Abdallah'),
+  ('fcs-2', 'face-of-computer-science', 'Kolawole Toba'),
+  ('fcs-3', 'face-of-computer-science', 'Yakubu Zainab')
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, category_id = EXCLUDED.category_id;
