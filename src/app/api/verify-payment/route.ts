@@ -77,7 +77,16 @@ export async function POST(req: Request) {
     }
 
     // ── Record in database ──────────────────────────────────────
-    const supabase = createAdminClient();
+    let supabase;
+    try {
+      supabase = createAdminClient();
+    } catch (err) {
+      console.error("Failed to create supabase client:", err);
+      return NextResponse.json(
+        { success: false, error: "Database configuration error" },
+        { status: 500 }
+      );
+    }
 
     // Insert transaction
     const { data: transaction, error: txError } = await supabase
