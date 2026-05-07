@@ -61,10 +61,10 @@ export default function AdminDashboard() {
       <div className="px-5 pt-5 pb-3">
         <div className="flex items-center gap-2 mb-1">
           <span className="w-[6px] h-[6px] rounded-full bg-live" />
-          <span className="text-[10px] text-live font-medium">Live</span>
+          <span className="text-[10px] text-live font-medium uppercase tracking-wider">Live</span>
         </div>
-        <h1 className="font-heading text-[26px] text-ink">Dashboard</h1>
-        <p className="text-[11px] text-ink-muted">Real-time voting statistics</p>
+        <h1 className="text-[24px] text-ink font-semibold" style={{ letterSpacing: "-0.01em" }}>Admin Dashboard</h1>
+        <p className="text-[12px] text-ink-light font-medium">Real-time voting statistics</p>
       </div>
 
       <div className="scroll-area px-5 pb-24">
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
 
             {/* Top Nominees */}
             <div className="mb-4">
-              <div className="cat-label">Top Nominees</div>
+              <div className="text-[13px] font-semibold text-ink mb-3 pb-2 border-b border-border-light">Top Nominees</div>
               {topNominees.map((n, i) => (
                 <div key={n.nomineeId} className="top-row animate-fade-in" style={{ animationDelay: `${i * 0.04}s` }}>
                   <span className="top-rank">{i + 1}</span>

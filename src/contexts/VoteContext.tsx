@@ -47,9 +47,12 @@ function voteReducer(state: VoteState, action: VoteAction): VoteState {
           ),
         };
       }
+      const filtered = state.selections.filter(
+        (s) => s.categoryId !== action.payload.categoryId
+      );
       return {
         ...state,
-        selections: [...state.selections, { ...action.payload, votes: 1 }],
+        selections: [...filtered, { ...action.payload, votes: 1 }],
       };
     }
 

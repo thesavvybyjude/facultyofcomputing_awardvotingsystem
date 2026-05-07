@@ -33,7 +33,7 @@ function SuccessContent() {
         <i className="ti ti-check" />
       </div>
 
-      <h1 className="font-heading text-[28px] text-ink mb-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+      <h1 className="text-[26px] text-ink font-semibold mb-2 animate-fade-in" style={{ animationDelay: "0.1s", letterSpacing: "-0.01em" }}>
         Votes Confirmed
       </h1>
       <p className="text-[13px] text-ink-muted mb-6 animate-fade-in" style={{ animationDelay: "0.15s" }}>

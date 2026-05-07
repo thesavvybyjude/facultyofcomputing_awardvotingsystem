@@ -3,9 +3,9 @@ import "./globals.css";
 import { VoteProvider } from "@/contexts/VoteContext";
 
 export const metadata: Metadata = {
-  title: "Class Awards 2026 — Vote for Your Favorites",
+  title: "Faculty of Computing Awards 2026 — Vote for Your Favorites",
   description:
-    "Cast your votes for the Class Awards 2026. Support your favorite nominees across multiple categories.",
+    "Cast your votes for the Faculty of Computing Awards 2026. Support your favorite nominees across multiple categories.",
 };
 
 export default function RootLayout({

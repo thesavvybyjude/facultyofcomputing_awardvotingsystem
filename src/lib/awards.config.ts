@@ -12,14 +12,13 @@ export interface CategoryConfig {
   id: string;
   name: string;
   type: "single" | "top2" | "duo";
-  emoji: string;
   displayOrder: number;
   nominees: NomineeConfig[];
 }
 
 export const VOTE_PRICE_NAIRA = 200;
 export const VOTE_PRICE_KOBO = VOTE_PRICE_NAIRA * 100;
-export const EVENT_NAME = "Class Awards 2026";
+export const EVENT_NAME = "Faculty of Computing Awards 2026";
 export const EVENT_TAGLINE = "Vote for Your Favorites";
 
 export const awardsConfig: CategoryConfig[] = [
@@ -27,7 +26,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "most-popular-female",
     name: "Most Popular Female",
     type: "single",
-    emoji: "⭐",
     displayOrder: 1,
     nominees: [
       { id: "mpf-1", name: "Jolayemi-Peter Oreoluwakitan" },
@@ -39,7 +37,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "most-popular-male",
     name: "Most Popular Male",
     type: "single",
-    emoji: "🌟",
     displayOrder: 2,
     nominees: [
       { id: "mpm-1", name: "Abdallah Abdallah" },
@@ -52,7 +49,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "most-social-female",
     name: "Most Social Female",
     type: "single",
-    emoji: "🦋",
     displayOrder: 3,
     nominees: [
       { id: "msf-1", name: "Ochanya Victoria" },
@@ -64,7 +60,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "most-social-male",
     name: "Most Social Male",
     type: "single",
-    emoji: "🗣️",
     displayOrder: 4,
     nominees: [
       { id: "msm-1", name: "Odiase Brian" },
@@ -76,7 +71,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "best-duo",
     name: "Best Duo",
     type: "duo",
-    emoji: "👯",
     displayOrder: 5,
     nominees: [
       { id: "bd-1", name: "Aisha Gbadamosi and Ayegh Jessica" },
@@ -88,7 +82,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "most-confident-female",
     name: "Most Confident Female",
     type: "single",
-    emoji: "👑",
     displayOrder: 6,
     nominees: [
       { id: "mcf-1", name: "Moses Elizabeth Oreoluwa" },
@@ -100,7 +93,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "most-confident-male",
     name: "Most Confident Male",
     type: "single",
-    emoji: "🦁",
     displayOrder: 7,
     nominees: [
       { id: "mcm-1", name: "Oyekunle Adeniyi Oluwaseyi" },
@@ -112,7 +104,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "best-dressed-male",
     name: "Best Dressed Male",
     type: "single",
-    emoji: "👔",
     displayOrder: 8,
     nominees: [
       { id: "bdm-1", name: "Amaga Salem Ojima" },
@@ -124,7 +115,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "best-dressed-female",
     name: "Best Dressed Female",
     type: "single",
-    emoji: "👗",
     displayOrder: 9,
     nominees: [
       { id: "bdf-1", name: "Edema Oristejeminetemi" },
@@ -135,7 +125,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "class-comedian",
     name: "Class Comedian",
     type: "single",
-    emoji: "😂",
     displayOrder: 10,
     nominees: [
       { id: "cc-1", name: "Salau Promise" },
@@ -147,7 +136,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "beauty-with-brains-female",
     name: "Beauty with Brains (Female)",
     type: "single",
-    emoji: "🧠",
     displayOrder: 11,
     nominees: [
       { id: "bwbf-1", name: "Aiyepe Halima" },
@@ -161,7 +149,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "funs-with-brains",
     name: "Funs with Brains",
     type: "single",
-    emoji: "💡",
     displayOrder: 12,
     nominees: [
       { id: "fwb-1", name: "Gabriel Emmanuel Eneojo" },
@@ -174,7 +161,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "always-late-award",
     name: "Always Late Award",
     type: "single",
-    emoji: "⏰",
     displayOrder: 13,
     nominees: [
       { id: "ala-1", name: "Zainab Abdulsalm" },
@@ -187,7 +173,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "most-entrepreneurial-female",
     name: "Most Entrepreneurial Female",
     type: "single",
-    emoji: "💼",
     displayOrder: 14,
     nominees: [
       { id: "mef-1", name: "Adefian Peace Folashade" },
@@ -198,7 +183,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "most-entrepreneurial-male",
     name: "Most Entrepreneurial Male",
     type: "single",
-    emoji: "🚀",
     displayOrder: 15,
     nominees: [
       { id: "mem-1", name: "Abdulhaqq Tijani" },
@@ -210,7 +194,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "future-leader-award",
     name: "Future Leader Award",
     type: "single",
-    emoji: "🌍",
     displayOrder: 16,
     nominees: [
       { id: "fla-1", name: "Kolawole Toba" },
@@ -221,7 +204,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "most-talented",
     name: "Most Talented",
     type: "single",
-    emoji: "🎨",
     displayOrder: 17,
     nominees: [
       { id: "mt-1", name: "Edema Oritsejeminetemi" },
@@ -233,7 +215,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "music-icon",
     name: "Music Icon",
     type: "single",
-    emoji: "🎵",
     displayOrder: 18,
     nominees: [
       { id: "mi-1", name: "Alex-Akpojosevbe Ahmed" },
@@ -243,7 +224,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "most-influential",
     name: "Most Influential",
     type: "single",
-    emoji: "🔥",
     displayOrder: 19,
     nominees: [
       { id: "minf-1", name: "Kolawole Toba" },
@@ -255,7 +235,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "sportswoman",
     name: "Sportswoman",
     type: "single",
-    emoji: "🏃‍♀️",
     displayOrder: 20,
     nominees: [
       { id: "sw-1", name: "Otuaga Eseoghene" },
@@ -266,7 +245,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "sportsman",
     name: "Sportsman",
     type: "single",
-    emoji: "🏃‍♂️",
     displayOrder: 21,
     nominees: [
       { id: "sm-1", name: "Kolawole Toba" },
@@ -278,7 +256,6 @@ export const awardsConfig: CategoryConfig[] = [
     id: "face-of-computer-science",
     name: "Face of Computer Science Department",
     type: "single",
-    emoji: "💻",
     displayOrder: 22,
     nominees: [
       { id: "fcs-1", name: "Abdallah Abdallah" },

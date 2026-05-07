@@ -52,11 +52,11 @@ export default function RealtimeResultsPage() {
       <div className="px-5 pt-5 pb-3">
         <div className="flex items-center gap-2 mb-1">
           <span className="w-[6px] h-[6px] rounded-full bg-live animate-pulse" />
-          <span className="text-[10px] text-live font-medium">Live</span>
-          <span className="text-[10px] text-ink-muted ml-auto">{totalVotes} total votes</span>
+          <span className="text-[10px] text-live font-medium uppercase tracking-wider">Live</span>
+          <span className="text-[11px] text-ink-muted ml-auto font-medium">{totalVotes} total votes</span>
         </div>
-        <h1 className="font-heading text-[26px] text-ink">Results</h1>
-        <p className="text-[11px] text-ink-muted">Live vote tallies by category</p>
+        <h1 className="text-[24px] text-ink font-semibold" style={{ letterSpacing: "-0.01em" }}>Results</h1>
+        <p className="text-[12px] text-ink-light font-medium">Live vote tallies by category</p>
       </div>
 
       <div className="scroll-area px-5 pb-24">
@@ -77,8 +77,8 @@ export default function RealtimeResultsPage() {
             return (
               <div key={cat.categoryId} className="mb-5 animate-fade-in" style={{ animationDelay: `${ci * 0.06}s` }}>
                 {/* Section title */}
-                <div className="text-[12px] font-medium text-ink pb-2 mb-2 border-b border-border">
-                  {cat.emoji || "🏆"} {cat.categoryName}
+                <div className="text-[13px] font-semibold text-ink pb-2 mb-3 border-b border-border-light">
+                  {cat.categoryName}
                 </div>
 
                 {/* Bar rows */}
