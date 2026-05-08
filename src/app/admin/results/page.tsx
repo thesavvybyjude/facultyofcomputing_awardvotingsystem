@@ -12,7 +12,7 @@ export default function RealtimeResultsPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const [categories, setCategories] = useState<CategoryResult[]>([]);
+  const [categories, setCategories] = useState<CategoryResult[] | null>(null);
   const [totalVotes, setTotalVotes] = useState(0);
   const [loading, setLoading] = useState(true);
   const channelRef = useRef<RealtimeChannel | null>(null);
@@ -23,11 +23,16 @@ export default function RealtimeResultsPage() {
     try {
       const res = await fetch("/api/admin/stats", { headers: { "x-admin-pin": pin } });
       const data = await res.json();
+      console.log("Results API response:", data);
       if (data.success) {
-        setCategories(data.stats.categoryResults);
-        setTotalVotes(data.stats.totalVotes);
+        setCategories(data.stats.categoryResults || []);
+        setTotalVotes(data.stats.totalVotes || 0);
+      } else {
+        console.error("Stats API error:", data.error);
       }
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+      console.error("Fetch results error:", e); 
+    }
     finally { setLoading(false); }
   }, []);
 
@@ -119,7 +124,7 @@ export default function RealtimeResultsPage() {
                 </div>
               ))}
             </div>
-          ) : !categories.length ? (
+          ) : !categories || categories.length === 0 ? (
             <div className="text-center py-12">
               <i className="ti ti-chart-bar text-4xl text-ink-muted mb-4" style={{ fontSize: 40, opacity: 0.3 }} />
               <p className="text-ink-muted text-[14px]">No votes yet</p>
@@ -178,7 +183,7 @@ export default function RealtimeResultsPage() {
       <div id="print-area" className="hidden print:block p-10">
         <div className="print-header">{EVENT_NAME}</div>
         <div className="print-sub">Live Voting Results — {totalVotes.toLocaleString()} total votes</div>
-        {categories.map((cat) => {
+        {categories && categories.map((cat) => {
           const maxVotes = Math.max(...cat.nominees.map((n) => n.totalVotes), 1);
           return (
             <div key={cat.categoryId}>
