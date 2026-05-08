@@ -71,6 +71,12 @@ export default function SummaryPage() {
   const fwOpen = useFlutterwave(fwConfig);
 
   const verifyPayment = async (data: { reference: string; transactionId: string }, attempt = 1) => {
+    if (!selectedProvider) {
+      setToast({ message: "Please select a payment method", type: "error" });
+      setIsProcessing(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/verify-payment", {
         method: "POST",

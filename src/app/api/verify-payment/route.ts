@@ -82,7 +82,14 @@ export async function POST(req: Request) {
     const totalVotes = selections.reduce((sum, s) => sum + s.votes, 0);
     const expectedAmountNaira = totalVotes * VOTE_PRICE_NAIRA;
 
-    const paymentProvider = provider || "flutterwave";
+    if (!provider) {
+      return NextResponse.json(
+        { success: false, error: "Missing payment provider" },
+        { status: 400 }
+      );
+    }
+
+    const paymentProvider = provider;
 
     let verifyResult: { success: boolean; data?: unknown; error?: string };
 
