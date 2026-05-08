@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { PinGate } from "@/components/admin/PinGate";
 import { Toast } from "@/components/Toast";
+import { createClient } from "@/lib/supabase/client";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 
 interface PendingTransaction {
   id: string;
@@ -27,6 +29,7 @@ export default function AdminPendingPage() {
   const [loading, setLoading] = useState(true);
   const [approving, setApproving] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const channelRef = useRef<RealtimeChannel | null>(null);
 
   useEffect(() => {
     const pin = sessionStorage.getItem("admin-pin");
@@ -47,11 +50,21 @@ export default function AdminPendingPage() {
 
   useEffect(() => {
     if (!mounted) return;
-    if (authenticated) {
-      fetchPending();
-      const iv = setInterval(fetchPending, 10000);
-      return () => clearInterval(iv);
-    }
+    if (!authenticated) return;
+    
+    fetchPending();
+    
+    const supabase = createClient();
+    const channel = supabase
+      .channel("pending-realtime")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "transactions" }, fetchPending)
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "transactions" }, fetchPending)
+      .subscribe();
+    channelRef.current = channel;
+    
+    return () => { 
+      if (channelRef.current) supabase.removeChannel(channelRef.current); 
+    };
   }, [authenticated, fetchPending, mounted]);
 
   if (!authenticated) return <PinGate onAuthenticated={() => setAuthenticated(true)} />;

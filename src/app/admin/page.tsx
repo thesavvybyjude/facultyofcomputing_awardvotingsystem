@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { PinGate } from "@/components/admin/PinGate";
 import type { CategoryResult } from "@/types";
+import { createClient } from "@/lib/supabase/client";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 
 interface Stats {
   totalVotes: number;
@@ -18,6 +20,7 @@ export default function AdminDashboard() {
 
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const channelRef = useRef<RealtimeChannel | null>(null);
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
@@ -39,12 +42,22 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!mounted) return;
-    if (authenticated) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      fetchStats();
-      const iv = setInterval(fetchStats, 15000);
-      return () => clearInterval(iv);
-    }
+    if (!authenticated) return;
+    
+    fetchStats();
+    
+    const supabase = createClient();
+    const channel = supabase
+      .channel("admin-realtime")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "votes" }, fetchStats)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "transactions" }, fetchStats)
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "transactions" }, fetchStats)
+      .subscribe();
+    channelRef.current = channel;
+    
+    return () => { 
+      if (channelRef.current) supabase.removeChannel(channelRef.current); 
+    };
   }, [authenticated, fetchStats, mounted]);
 
   if (!authenticated) return <PinGate onAuthenticated={() => setAuthenticated(true)} />;
