@@ -44,13 +44,8 @@ export const ENABLE_PAYSTACK = DEFAULT_ENABLE_PAYSTACK;
 export const ENABLE_FLUTTERWAVE = DEFAULT_ENABLE_FLUTTERWAVE;
 export const ENABLE_TRANSFER = DEFAULT_ENABLE_TRANSFER;
 
-// Bank transfer - use defaults from default-config.ts
-export const BANK_TRANSFER_DETAILS = process.env.BANK_NAME ? {
-  bankName: process.env.BANK_NAME,
-  accountNumber: process.env.BANK_ACCOUNT_NUMBER || "0000000000",
-  accountName: process.env.BANK_ACCOUNT_NAME || "Account Name",
-  instructions: process.env.BANK_TRANSFER_INSTRUCTIONS || "Transfer the exact amount and click 'I've sent the money' below",
-} : DEFAULT_BANK_DETAILS;
+// Bank transfer - use default-config.ts only
+export const BANK_TRANSFER_DETAILS = DEFAULT_BANK_DETAILS;
 
 // WhatsApp - use defaults from default-config.ts
 export const WHATSAPP_VERIFY_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_VERIFY_NUMBER || DEFAULT_WHATSAPP;
