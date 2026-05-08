@@ -925,6 +925,38 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
   letter-spacing: -0.02em;
 }
+.transfer-timer {
+  background: linear-gradient(135deg, #22C55E 0%, #16a34a 100%);
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+}
+.transfer-timer.urgent {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+.transfer-timer-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.transfer-timer-value {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  color: white;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.transfer-timer-hint {
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 6px;
+}
 .bank-details {
   background: var(--white);
   border: 1px solid var(--border-light);
@@ -958,6 +990,29 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-light);
   text-align: center;
   padding: 0 1rem;
+}
+
+/* ── Share Button ─────────────────────────────────── */
+.btn-share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: linear-gradient(135deg, #3B82F6 0%, #2563eb 100%);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+}
+.btn-share:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
 }
 
 /* ── Toast ────────────────────────────────────────── */

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useVote } from "@/contexts/VoteContext";
@@ -20,6 +20,10 @@ export default function SummaryPage() {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
   const [showTransferDetails, setShowTransferDetails] = useState(false);
+  const [transferTimeLeft, setTransferTimeLeft] = useState(9 * 60); // 9 minutes in seconds
+  const [transferReference, setTransferReference] = useState<string | null>(null);
+  const [showTransferSuccess, setShowTransferSuccess] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const totalVotes = getTotalVotes();
   const totalAmountNaira = getTotalAmount() / 100;
@@ -151,7 +155,9 @@ export default function SummaryPage() {
       const response = await res.json();
       if (response.success) {
         clearSelections();
-        router.push(`/vote/success?ref=${response.reference}&pending=true`);
+        setTransferReference(response.reference);
+        setShowTransferSuccess(true);
+        setShowTransferDetails(false);
       } else {
         setToast({ message: "Failed to create transaction", type: "error" });
         setIsProcessing(false);
@@ -172,16 +178,121 @@ export default function SummaryPage() {
     }
   };
 
+  // Timer countdown for transfer
+  useEffect(() => {
+    if (showTransferDetails && !showTransferSuccess && transferTimeLeft > 0) {
+      timerRef.current = setInterval(() => {
+        setTransferTimeLeft((prev) => {
+          if (prev <= 1) {
+            setShowTransferDetails(false);
+            setTransferTimeLeft(9 * 60);
+            if (timerRef.current) clearInterval(timerRef.current);
+            return 9 * 60;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [showTransferDetails, showTransferSuccess]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const generateShareText = () => {
+    const votesList = selections.map(s => `${s.nomineeName}: ${s.votes} vote(s)`).join(", ");
+    return `🏆 Faculty of Computing Awards 2026\n\n💰 Payment: ₦${totalAmountNaira.toLocaleString()}\n📋 Votes: ${totalVotes}\n🔖 Ref: ${transferReference}\n\nNominees:\n${votesList}\n\n#FacultyAwards2026`;
+  };
+
+  const handleShare = async () => {
+    const text = generateShareText();
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Faculty Awards Payment",
+          text: text,
+        });
+      } catch (err) {
+        // User cancelled or error
+        console.log("Share cancelled");
+      }
+    } else {
+      // Fallback: copy to clipboard
+      await navigator.clipboard.writeText(text);
+      setToast({ message: "Receipt copied to clipboard!", type: "success" });
+    }
+  };
+
+  if (showTransferSuccess && transferReference) {
+    return (
+      <div className="flex flex-col min-h-screen bg-surface">
+        <ScreenHeader title="Transfer Submitted" />
+
+        <div className="scroll-area px-5 pb-8">
+          <div className="success-check animate-scale-in pending" style={{ background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)" }}>
+            <i className="ti ti-check" />
+          </div>
+
+          <h1 className="text-[22px] text-ink font-semibold text-center mb-2">Transfer Submitted!</h1>
+          <p className="text-[13px] text-ink-muted text-center mb-6">
+            Your transfer is being reviewed. You'll receive confirmation shortly.
+          </p>
+
+          <div className="receipt mt-4">
+            <div className="receipt-row">
+              <span className="receipt-label">Reference</span>
+              <span className="receipt-value text-[10px] font-mono">{transferReference}</span>
+            </div>
+            <div className="receipt-row">
+              <span className="receipt-label">Amount</span>
+              <span className="receipt-value">₦{totalAmountNaira.toLocaleString()}</span>
+            </div>
+            <div className="receipt-row">
+              <span className="receipt-label">Votes</span>
+              <span className="receipt-value">{totalVotes}</span>
+            </div>
+          </div>
+
+          <button
+            onClick={handleShare}
+            className="btn-share mt-5 animate-fade-in"
+          >
+            <i className="ti ti-share" style={{ fontSize: 16 }} />
+            Share Receipt
+          </button>
+
+          <Link href="/" className="btn-outline w-full justify-center mt-3">
+            Back to Home
+          </Link>
+        </div>
+
+        {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      </div>
+    );
+  }
+
   if (showTransferDetails) {
+    const isUrgent = transferTimeLeft < 60;
     return (
       <div className="flex flex-col min-h-screen bg-surface">
         <ScreenHeader 
           title="Bank Transfer" 
-          backAction={() => setShowTransferDetails(false)}
+          backAction={() => { setShowTransferDetails(false); setTransferTimeLeft(9 * 60); }}
         />
 
         <div className="scroll-area px-5 pb-8">
-          <div className="transfer-card animate-fade-in">
+          <div className={`transfer-timer ${isUrgent ? "urgent" : ""} animate-fade-in`}>
+            <div className="transfer-timer-label">Time remaining to complete transfer</div>
+            <div className="transfer-timer-value">{formatTime(transferTimeLeft)}</div>
+            <div className="transfer-timer-hint">Complete transfer before timer expires</div>
+          </div>
+
+          <div className="transfer-card animate-fade-in" style={{ marginTop: "1rem" }}>
             <div className="transfer-amount-label">Amount to transfer</div>
             <div className="transfer-amount">₦{totalAmountNaira.toLocaleString()}</div>
           </div>
@@ -215,10 +326,10 @@ export default function SummaryPage() {
           </button>
 
           <button
-            onClick={() => setShowTransferDetails(false)}
+            onClick={() => { setShowTransferDetails(false); setTransferTimeLeft(9 * 60); }}
             className="btn-outline w-full justify-center"
           >
-            ← Back
+            Cancel
           </button>
         </div>
       </div>
