@@ -25,9 +25,11 @@ interface PendingTransaction {
 export default function AdminPendingPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const [pending, setPending] = useState<PendingTransaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [approving, setApproving] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const channelRef = useRef<RealtimeChannel | null>(null);
 
@@ -36,6 +38,7 @@ export default function AdminPendingPage() {
     const pin = sessionStorage.getItem("admin-pin");
     setAuthenticated(!!pin);
     setMounted(true);
+    setIsDesktop(window.innerWidth >= 1024);
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
 
@@ -98,6 +101,33 @@ export default function AdminPendingPage() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    const pin = sessionStorage.getItem("admin-pin");
+    if (!pin) return;
+    
+    if (!confirm("Are you sure you want to delete this pending transaction? This cannot be undone.")) {
+      return;
+    }
+    
+    setDeleting(id);
+    try {
+      const res = await fetch(`/api/admin/delete-pending?pin=${pin}&id=${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToast({ message: "Transaction deleted!", type: "success" });
+        setPending((prev) => prev.filter((t) => t.id !== id));
+      } else {
+        setToast({ message: data.error || "Failed to delete", type: "error" });
+      }
+    } catch {
+      setToast({ message: "Network error", type: "error" });
+    } finally {
+      setDeleting(null);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-surface">
       <div className="px-5 pt-5 pb-3">
@@ -144,13 +174,25 @@ export default function AdminPendingPage() {
                     <span key={i} className="pending-vote-tag">{v.nomineeName} ×{v.votes}</span>
                   ))}
                 </div>
-                <button
-                  onClick={() => handleApprove(t.id)}
-                  disabled={approving === t.id}
-                  className="pending-approve-btn"
-                >
-                  {approving === t.id ? "Approving..." : "Approve & Add Votes"}
-                </button>
+                <div className="pending-actions">
+                  <button
+                    onClick={() => handleApprove(t.id)}
+                    disabled={approving === t.id}
+                    className="pending-approve-btn"
+                  >
+                    {approving === t.id ? "Approving..." : "Approve & Add Votes"}
+                  </button>
+                  {isDesktop && (
+                    <button
+                      onClick={() => handleDelete(t.id)}
+                      disabled={deleting === t.id}
+                      className="pending-delete-btn"
+                      title="Delete (Desktop only)"
+                    >
+                      {deleting === t.id ? "Deleting..." : "🗑️ Delete"}
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>

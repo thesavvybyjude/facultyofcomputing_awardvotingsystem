@@ -1160,6 +1160,34 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.6;
   cursor: not-allowed;
 }
+.pending-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.pending-approve-btn {
+  flex: 1;
+}
+.pending-delete-btn {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.pending-delete-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.pending-delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 /* ── Transaction Log Table ─────────────────────────── */
 .stat-card {
