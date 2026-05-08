@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useVote } from "@/contexts/VoteContext";
+import type { VoteSelection } from "@/types";
 import { VOTE_PRICE_NAIRA, ENABLE_PAYSTACK, ENABLE_FLUTTERWAVE, ENABLE_TRANSFER, BANK_TRANSFER_DETAILS, WHATSAPP_VERIFY_NUMBER } from "@/lib/awards.config";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { generateReference as generateFwReference } from "@/lib/flutterwave";
@@ -148,9 +149,17 @@ export default function SummaryPage() {
     });
   };
 
+  const [transferAmount, setTransferAmount] = useState(0);
+  const [transferVotes, setTransferVotes] = useState(0);
+  const [transferSelections, setTransferSelections] = useState<VoteSelection[]>([]);
+
   const handleTransfer = async () => {
     if (totalVotes === 0 || selectedProvider !== "transfer") return;
     setIsProcessing(true);
+
+    const amount = totalAmountNaira;
+    const votes = totalVotes;
+    const savedSelections = [...selections];
 
     try {
       const res = await fetch("/api/create-manual-transaction", {
@@ -160,6 +169,9 @@ export default function SummaryPage() {
       });
       const response = await res.json();
       if (response.success) {
+        setTransferAmount(amount);
+        setTransferVotes(votes);
+        setTransferSelections(savedSelections);
         clearSelections();
         setTransferReference(response.reference);
         setShowTransferSuccess(true);
@@ -211,8 +223,8 @@ export default function SummaryPage() {
   };
 
   const generateShareText = () => {
-    const votesList = selections.map(s => `${s.nomineeName}: ${s.votes} vote(s)`).join(", ");
-    return `🏆 Faculty Awards 2026 - Payment Confirmation\n\n💰 Amount: ₦${totalAmountNaira.toLocaleString()}\n✅ Votes: ${totalVotes} (${votesList})\n📋 Ref: ${transferReference}\n\nSent to verify payment. Thank you!`;
+    const votesList = transferSelections.map(s => `${s.nomineeName}: ${s.votes} vote(s)`).join(", ");
+    return `🏆 Faculty Awards 2026 - Payment Confirmation\n\n💰 Amount: ₦${transferAmount.toLocaleString()}\n✅ Votes: ${transferVotes} (${votesList})\n📋 Ref: ${transferReference}\n\nSent to verify payment. Thank you!`;
   };
 
   const handleShare = () => {
@@ -247,11 +259,11 @@ export default function SummaryPage() {
             </div>
             <div className="receipt-row">
               <span className="receipt-label">Amount</span>
-              <span className="receipt-value">₦{totalAmountNaira.toLocaleString()}</span>
+              <span className="receipt-value">₦{transferAmount.toLocaleString()}</span>
             </div>
             <div className="receipt-row">
               <span className="receipt-label">Votes</span>
-              <span className="receipt-value">{totalVotes}</span>
+              <span className="receipt-value">{transferVotes}</span>
             </div>
           </div>
 
