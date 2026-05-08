@@ -120,7 +120,32 @@ export default function SummaryPage() {
     const config = {
       ...fwConfig,
       callback: (data: { tx_ref: string; transaction_id: number; status: string }) => {
-        verifyPayment({ reference: data.tx_ref, transactionId: data.transaction_id.toString() });
+        // If Flutterwave says successful, record directly without verification
+        if (data.status === "successful" || data.status === "completed") {
+          // Record transaction directly
+          fetch("/api/verify-payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              reference: data.tx_ref,
+              transactionId: data.transaction_id.toString(),
+              provider: "flutterwave",
+              selections,
+              skipVerification: true, // Skip Flutterwave API verification
+            }),
+          }).then(res => res.json()).then(response => {
+            if (response.success) {
+              clearSelections();
+              closePaymentModal();
+              router.push(`/vote/success?ref=${data.tx_ref}`);
+            } else {
+              setToast({ message: "Recording failed: " + response.error, type: "error" });
+              setIsProcessing(false);
+            }
+          });
+        } else {
+          verifyPayment({ reference: data.tx_ref, transactionId: data.transaction_id.toString() });
+        }
       },
       onClose: () => {
         setToast({ message: "Payment cancelled", type: "error" });

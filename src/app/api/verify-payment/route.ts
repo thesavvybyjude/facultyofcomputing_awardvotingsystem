@@ -70,11 +70,12 @@ async function verifyFlutterwave(transactionId: string, reference: string, expec
 
 export async function POST(req: Request) {
   try {
-    const { reference, transactionId, selections, provider } = (await req.json()) as {
+    const { reference, transactionId, selections, provider, skipVerification } = (await req.json()) as {
       reference: string;
       transactionId: string;
       selections: VoteSelection[];
       provider?: Provider;
+      skipVerification?: boolean;
     };
 
     if (!reference || !selections || selections.length === 0) {
@@ -96,18 +97,23 @@ export async function POST(req: Request) {
 
     const paymentProvider = provider;
 
-    let verifyResult: VerifyResult;
+    let verifyResult: VerifyResult = { success: true };
 
-    if (paymentProvider === "paystack") {
-      verifyResult = await verifyPaystack(reference, expectedAmountNaira);
-    } else {
-      if (!transactionId) {
-        return NextResponse.json(
-          { success: false, error: "Missing transactionId for Flutterwave" },
-          { status: 400 }
-        );
+    // Skip verification if Flutterwave already confirmed success
+    if (!skipVerification) {
+      if (paymentProvider === "paystack") {
+        verifyResult = await verifyPaystack(reference, expectedAmountNaira);
+      } else {
+        if (!transactionId) {
+          return NextResponse.json(
+            { success: false, error: "Missing transactionId for Flutterwave" },
+            { status: 400 }
+          );
+        }
+        verifyResult = await verifyFlutterwave(transactionId, reference, expectedAmountNaira);
       }
-      verifyResult = await verifyFlutterwave(transactionId, reference, expectedAmountNaira);
+    } else {
+      console.log("Skipping verification - Flutterwave confirmed success");
     }
 
     if (!verifyResult.success) {
